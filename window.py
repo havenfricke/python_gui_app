@@ -1,0 +1,112 @@
+import sys
+import glfw
+import OpenGL.GL as gl
+
+from slimgui import imgui
+from slimgui.integrations.glfw import GlfwRenderer
+
+import components.nav as nav
+import components.content_panel as content_panel
+
+class window:
+    def __init__(self, width: int = 800, height: int = 600, title: str = "ImGui Layout Example"):
+        self.width = width
+        self.height = height
+        self.title = title
+        
+        self.window = self.init_glfw()
+        self.impl = self.init_imgui()
+        
+        self.window_flags = (
+            imgui.WindowFlags.NO_TITLE_BAR |
+            imgui.WindowFlags.NO_RESIZE |
+            imgui.WindowFlags.NO_MOVE |
+            imgui.WindowFlags.NO_COLLAPSE |
+            imgui.WindowFlags.NO_BRING_TO_FRONT_ON_FOCUS
+        )
+
+    def init_glfw(self):
+        if not glfw.init():
+            sys.exit(1)
+
+        glfw.window_hint(glfw.CONTEXT_VERSION_MAJOR, 3)
+        glfw.window_hint(glfw.CONTEXT_VERSION_MINOR, 3)
+        glfw.window_hint(glfw.OPENGL_PROFILE, glfw.OPENGL_CORE_PROFILE)
+        glfw.window_hint(glfw.OPENGL_FORWARD_COMPAT, gl.GL_TRUE)
+
+        window = glfw.create_window(self.width, self.height, self.title, None, None)
+
+        if not window:
+            glfw.terminate()
+            sys.exit(1)
+
+        glfw.make_context_current(window)
+
+        return window
+
+    def init_imgui(self) -> GlfwRenderer:
+        imgui.create_context()
+        imgui.get_io().ini_filename = None
+        return GlfwRenderer(self.window)
+
+    def sync_io(self) -> tuple[int, int, int, int]:
+        # Synchronizes ImGui IO with GLFW window dimensions
+        io = imgui.get_io()
+        width, height = glfw.get_window_size(self.window)
+        fb_width, fb_height = glfw.get_framebuffer_size(self.window)
+        
+        io.display_size = (width, height)
+
+        if width > 0 and height > 0:
+            io.display_framebuffer_scale = (fb_width / width, fb_height / height)
+            
+        return width, height, fb_width, fb_height
+
+    def render_ui(self, width: int, height: int):
+        # Constructs the ImGui interface for the current frame
+        imgui.set_next_window_pos((0, 0), imgui.Cond.ALWAYS)
+        imgui.set_next_window_size((width, height), imgui.Cond.ALWAYS)
+
+        imgui.push_style_var(imgui.StyleVar.WINDOW_ROUNDING, 0.0)
+        imgui.push_style_var(imgui.StyleVar.WINDOW_BORDER_SIZE, 0.0)
+
+        imgui.begin("Main", flags=self.window_flags)
+
+        nav.init_nav()
+
+        imgui.same_line()
+
+        imgui.begin_child("Content", (0, 0))
+        content_panel.init_content_panel(width, height)
+        imgui.spacing()
+
+        if imgui.button("Close Application", (150, 0)):
+            glfw.set_window_should_close(self.window, True)
+            
+        imgui.end_child()
+        imgui.end()
+        imgui.pop_style_var(2)
+
+    def run(self):
+        # Main application and render loop
+        while not glfw.window_should_close(self.window):
+            glfw.poll_events()
+
+            width, height, fb_width, fb_height = self.sync_io()
+
+            imgui.new_frame()
+            self.render_ui(width, height)
+
+            gl.glViewport(0, 0, fb_width, fb_height)
+            gl.glClearColor(0.1, 0.15, 0.2, 1.0)
+            gl.glClear(gl.GL_COLOR_BUFFER_BIT)
+            
+            imgui.render()
+            self.impl.render(imgui.get_draw_data())
+            glfw.swap_buffers(self.window)
+
+        self.shutdown()
+
+    def shutdown(self):
+        self.impl.shutdown()
+        glfw.terminate()
