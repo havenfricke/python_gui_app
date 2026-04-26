@@ -20,3 +20,5 @@ def init_content_panel(width, height, window):
             diagnostics.init_diagnostics(width, height, window)
 
     imgui.spacing()
+
+    imgui.end_child()

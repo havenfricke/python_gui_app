@@ -74,9 +74,10 @@ class window:
         imgui.begin("Main", flags=self.window_flags)
         
         nav.init_nav()
+        imgui.same_line()
         content_panel.init_content_panel(width, height, self.window)
             
-        imgui.end_child()
+        
         imgui.end()
         imgui.pop_style_var(2)
 
