@@ -18,10 +18,7 @@ application to remain uniform and allow any file to access values necessary for 
 
 ### Structure
 
-main.py / app_state.py --------|
-    core ----------------------|
-        components ------------|
-            pages -------------|
+- main.py / app_state.py -> /core -> /components -> /pages
 
 *All necessary window objects, glfw, and imgui settings need to be passed as arguments to pages and components.*
 
