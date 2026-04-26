@@ -26,6 +26,7 @@ class window:
         )
 
     def init_glfw(self):
+
         if not glfw.init():
             sys.exit(1)
 
@@ -63,7 +64,7 @@ class window:
         return width, height, fb_width, fb_height
 
     def render_ui(self, width: int, height: int):
-        # Constructs the ImGui interface for the current frame
+        # Constructs the imgui interface for the current frame
         imgui.set_next_window_pos((0, 0), imgui.Cond.ALWAYS)
         imgui.set_next_window_size((width, height), imgui.Cond.ALWAYS)
 
@@ -71,17 +72,9 @@ class window:
         imgui.push_style_var(imgui.StyleVar.WINDOW_BORDER_SIZE, 0.0)
 
         imgui.begin("Main", flags=self.window_flags)
-
+        
         nav.init_nav()
-
-        imgui.same_line()
-
-        imgui.begin_child("Content", (0, 0))
-        content_panel.init_content_panel(width, height)
-        imgui.spacing()
-
-        if imgui.button("Close Application", (150, 0)):
-            glfw.set_window_should_close(self.window, True)
+        content_panel.init_content_panel(width, height, self.window)
             
         imgui.end_child()
         imgui.end()

@@ -17,3 +17,5 @@ def init_nav():
         app_state.current_page = "Diagnostics"
         
     imgui.end_child()
+
+    imgui.same_line()
