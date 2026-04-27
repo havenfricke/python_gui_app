@@ -3,5 +3,5 @@ from slimgui import imgui
 
 def init_dashboard():
     
-    imgui.text("Dashboard View")
-    imgui.text("Welcome to the primary overview.")
+    imgui.text_wrapped("Dashboard View")
+    imgui.text_wrapped("Welcome to the primary overview.")

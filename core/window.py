@@ -24,6 +24,7 @@ class window:
             imgui.WindowFlags.NO_COLLAPSE |
             imgui.WindowFlags.NO_BRING_TO_FRONT_ON_FOCUS
         )
+        
 
     def init_glfw(self):
 
@@ -37,6 +38,8 @@ class window:
 
         window = glfw.create_window(self.width, self.height, self.title, None, None)
 
+        glfw.set_window_size_limits(window, self.width, self.height, glfw.DONT_CARE, glfw.DONT_CARE)
+
         if not window:
             glfw.terminate()
             sys.exit(1)
@@ -44,11 +47,13 @@ class window:
         glfw.make_context_current(window)
 
         return window
+    
 
     def init_imgui(self) -> GlfwRenderer:
         imgui.create_context()
         imgui.get_io().ini_filename = None
         return GlfwRenderer(self.window)
+    
 
     def sync_io(self) -> tuple[int, int, int, int]:
         # Synchronizes ImGui IO with GLFW window dimensions
@@ -62,6 +67,7 @@ class window:
             io.display_framebuffer_scale = (fb_width / width, fb_height / height)
             
         return width, height, fb_width, fb_height
+    
 
     def render_ui(self, width: int, height: int):
         # Constructs the imgui interface for the current frame
@@ -80,6 +86,7 @@ class window:
         
         imgui.end()
         imgui.pop_style_var(2)
+
 
     def run(self):
         # Main application and render loop
@@ -100,6 +107,7 @@ class window:
             glfw.swap_buffers(self.window)
 
         self.shutdown()
+
 
     def shutdown(self):
         self.impl.shutdown()
