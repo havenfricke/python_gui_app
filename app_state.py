@@ -9,6 +9,9 @@ dash_row_values = {
     # "saved-0": ""
 }
 dash_rows = 0
+row_to_remove = None
+show_extra_window = False
+new_row_title = ""
 
 # --- Settings ---
 dark_mode_enabled = True
