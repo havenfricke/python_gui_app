@@ -6,6 +6,7 @@
 - `cd venv_name` then (Windows) `./Scripts/Activate.ps1` or (Linux) `source bin/activate`
 - Switch interpreter to venv if necessary.
 - Install packages: `pip install slimgui glfw PyOpenGL numpy`
+- [ImGui reference](https://nurpax.github.io/slimgui/api/imgui.html) (Have this open when building with this app)
 
 
 ### Overview
