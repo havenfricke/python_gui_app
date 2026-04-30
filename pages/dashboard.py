@@ -17,7 +17,7 @@ def init_dashboard():
         dash_rows += 1
 # ----------------------------------------
 
-    row_to_remove = None
+    
 
     for i in range(dash_rows):
         
@@ -41,7 +41,7 @@ def init_dashboard():
             imgui.text_wrapped(f"Input {i + 1}")
             imgui.same_line()
             
-            # 2. Flag the row for removal, do NOT delete data here
+            # Flag the row for removal, do NOT delete data here
             pressed_rm_row = imgui.button(f"Remove##rm_{i}")
             if pressed_rm_row:
                 row_to_remove = i
