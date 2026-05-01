@@ -11,7 +11,7 @@ def init_content_panel(width, height, window):
     match app_state.current_page:
 
         case "Dashboard":
-            dashboard.init_dashboard()
+           dashboard.init_dashboard()
         
         case "Settings":
             settings.init_settings()

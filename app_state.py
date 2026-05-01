@@ -20,3 +20,4 @@ dark_mode_enabled = True
 # --- diagnostics ---
 a_value_goes_here = None
 #-------------------------
+

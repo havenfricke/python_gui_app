@@ -7,6 +7,7 @@ from slimgui.integrations.glfw import GlfwRenderer
 
 import components.nav as nav
 import components.content_panel as content_panel
+import utils.user_data as user_data
 
 class window:
     def __init__(self, width: int = 800, height: int = 600, title: str = "ImGui Layout Example"):
@@ -24,6 +25,8 @@ class window:
             imgui.WindowFlags.NO_COLLAPSE |
             imgui.WindowFlags.NO_BRING_TO_FRONT_ON_FOCUS
         )
+        
+        user_data.init_user_data() # create application metadata such as ID and IP Address
         
         # Register callbacks to force rendering during OS-level blocking operations
         glfw.set_framebuffer_size_callback(self.window, self.on_resize)
