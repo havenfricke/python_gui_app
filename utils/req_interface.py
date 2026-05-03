@@ -1,7 +1,7 @@
 import requests
 
 # Changed to http:// - adjust back to https:// only if your local server uses SSL
-BASE_URL = "http://localhost:8000"
+BASE_URL = "http://localhost:8000/apps"
 
 
 class req_interface:
