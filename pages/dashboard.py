@@ -3,11 +3,6 @@ import app_state
 from utils.save_state import save_state
 
 def init_dashboard():
-    # global row_to_remove
-    # global dash_row_values
-    # global dash_rows
-    # global show_extra_window
-    # global new_row_title
 
     avail_width = imgui.get_content_region_avail()[0]
     
