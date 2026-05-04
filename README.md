@@ -18,6 +18,9 @@ the navigation menu and dynamic "content panel" updates during app use. Inside `
 when navigating the application. The `app_state.py` file is responsible for housing variables, arrays, etc. for the state of the
 application to remain uniform and allow any file to access values necessary for the application's functionality.
 
+When the application first runs it will create a folder and file named `user_data/user_data.json` storing uniquely generated ID and public IP address.
+This data is used to identify app data ownership.
+
 
 ### Structure
 
