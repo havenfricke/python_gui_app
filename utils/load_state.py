@@ -1,6 +1,6 @@
 import json
 import app_state
-import utils.req_interface as r
+import services.state_service as s
 import utils.user_data as user
 from models.App import App
 
@@ -11,7 +11,7 @@ def load():
     app = App(app_id=APP_ID, app_metadata=app_state.dash_row_values, app_rows=app_state.dash_rows)
     print(app.__dict__)
     
-    read_res = r.request.read(APP_ID) 
+    read_res = s.request.read(APP_ID) 
 
     # General network errors
     if isinstance(read_res, Exception):
@@ -22,13 +22,13 @@ def load():
     if read_res.status_code == 404:
         print(f"App ID {APP_ID} not found. Attempting to create...")
         
-        create_res = r.request.create(app.__dict__)
+        create_res = s.request.create(app.__dict__)
         if create_res.status_code not in (200, 201, 204):
              print(f"CREATE failed with HTTP {create_res.status_code}: {create_res.text}")
              return
              
         # Read again after successful creation
-        read_res = r.request.read(APP_ID)
+        read_res = s.request.read(APP_ID)
         if read_res.status_code not in (200, 204):
             print(f"Subsequent load failed with HTTP {read_res.status_code}: {read_res.text}")
             return
@@ -37,7 +37,7 @@ def load():
     elif read_res.status_code not in (200, 204):
         print(f"Load failed with HTTP {read_res.status_code}: {read_res.text}")
         
-        create_res = r.request.create(app.__dict__)
+        create_res = s.request.create(app.__dict__)
         if create_res.status_code not in (200, 201, 204):
              print(f"CREATE failed with HTTP {create_res.status_code}: {create_res.text}")
              return

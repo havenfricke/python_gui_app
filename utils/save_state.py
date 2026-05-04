@@ -1,4 +1,4 @@
-import utils.req_interface as r
+import services.state_service as s
 import utils.user_data as user
 import app_state
 
@@ -15,11 +15,11 @@ def save_state():
     
     print(f"Dispatching update payload: {update_payload}")
     
-    # Pass the raw Python dictionary; r.request.update will handle serialization
+    # Pass the raw Python dictionary; s.request.update will handle serialization
     sync_state(update_payload)
 
 def sync_state(payload):
-    update_res = r.request.update(APP_ID, payload)
+    update_res = s.request.update(APP_ID, payload)
 
     # general errors
     if isinstance(update_res, Exception):
