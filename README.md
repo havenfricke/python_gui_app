@@ -18,14 +18,30 @@ the navigation menu and dynamic "content panel" updates during app use. Inside `
 when navigating the application. The `app_state.py` file is responsible for housing variables, arrays, etc. for the state of the
 application to remain uniform and allow any file to access values necessary for the application's functionality.
 
-When the application first runs it will create a folder and file named `user_data/user_data.json` storing uniquely generated ID and public IP address.
-This data is used to identify app data ownership.
+When the application first runs it will create a folder and file named `user_data/user_data.json` storing a uniquely generated ID and public IP address.
+This information is used to identify app data ownership. `dashboard.py` calls `save_state.py` to then sync the state. `save_state.py` and `load_state.py` both
+call to `state_service.py` to make server requests for cloud synchronization of the application's state. 
 
 
 ### Structure
 
 - main.py / app_state.py -> /core -> /components -> /pages
 
+**What data should I be sending and receiving from my server?**
+```sql
+CREATE TABLE apps (
+    app_id VARCHAR(255) NOT NULL PRIMARY KEY UNIQUE COMMENT 'Primary Key',
+    app_metadata JSON,
+    app_rows INT
+)
+```
+```python
+class App:
+    def __init__(self, app_id: str, app_metadata: dict, app_rows: int):
+        self.app_id = app_id
+        self.app_metadata = app_metadata
+        self.app_rows = app_rows
+```
 
 *All necessary window objects, glfw, and imgui settings need to be passed as arguments to pages and components.*
 
