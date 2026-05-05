@@ -3,4 +3,3 @@ class App:
         self.app_id = app_id
         self.app_metadata = app_metadata
         self.app_rows = app_rows
-
