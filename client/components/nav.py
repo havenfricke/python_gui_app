@@ -8,13 +8,13 @@ def init_nav():
     imgui.text("MENU")
     imgui.separator()
 
-    if imgui.selectable("Dashboard", app_state.current_page == "Dashboard")[0]:
-        app_state.current_page = "Dashboard"
+    if imgui.selectable("Dashboard", app_state.watcher.current_page == "Dashboard")[0]:
+        app_state.watcher.current_page = "Dashboard"
+
+    if imgui.selectable("Conversations", app_state.watcher.current_page == "Conversations")[0]:
+        app_state.watcher.current_page = "Conversations"
         
-    if imgui.selectable("System Settings", app_state.current_page == "Settings")[0]:
-        app_state.current_page = "Settings"
-        
-    if imgui.selectable("Diagnostics", app_state.current_page == "Diagnostics")[0]:
-        app_state.current_page = "Diagnostics"
+    if imgui.selectable("System Settings", app_state.watcher.current_page == "Settings")[0]:
+        app_state.watcher.current_page = "Settings"
         
     imgui.end_child()

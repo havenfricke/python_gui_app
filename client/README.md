@@ -31,16 +31,16 @@ call to `state_service.py` to make server requests for cloud synchronization of 
 ```sql
 CREATE TABLE apps (
     app_id VARCHAR(255) NOT NULL PRIMARY KEY UNIQUE COMMENT 'Primary Key',
-    app_metadata JSON,
-    app_rows INT
+    app_ip VARCHAR(255) NOT NULL,
+    app_metadata JSON
 )
 ```
 ```python
 class App:
-    def __init__(self, app_id: str, app_metadata: dict, app_rows: int):
+    def __init__(self, app_id: str, app_ip: str, app_metadata: dict):
         self.app_id = app_id
+        self.app_ip = app_ip
         self.app_metadata = app_metadata
-        self.app_rows = app_rows
 ```
 
 *All necessary window objects, glfw, and imgui settings need to be passed as arguments to pages and components.*

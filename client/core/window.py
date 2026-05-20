@@ -8,13 +8,15 @@ from slimgui.integrations.glfw import GlfwRenderer
 import components.nav as nav
 import components.content_panel as content_panel
 import utils.user_data as user_data
-import utils.load_state as load_state
+
 
 class window:
     def __init__(self, width: int = 800, height: int = 600, title: str = "ImGui Layout Example"):
         self.width = width
         self.height = height
         self.title = title
+
+        self.last_time = glfw.get_time()
         
         self.window = self.init_glfw()
         self.impl = self.init_imgui()
@@ -28,7 +30,6 @@ class window:
         )
         
         user_data.init_user_data() # create application metadata such as ID and IP Address
-        load_state.load()
         
         # Register callbacks to force rendering during OS-level blocking operations
         glfw.set_framebuffer_size_callback(self.window, self.on_resize)
@@ -38,12 +39,8 @@ class window:
         if not glfw.init():
             sys.exit(1)
 
-        glfw.window_hint(glfw.CONTEXT_VERSION_MAJOR, 3)
-        glfw.window_hint(glfw.CONTEXT_VERSION_MINOR, 3)
-        glfw.window_hint(glfw.OPENGL_PROFILE, glfw.OPENGL_CORE_PROFILE)
-        glfw.window_hint(glfw.OPENGL_FORWARD_COMPAT, gl.GL_TRUE)
-
         window = glfw.create_window(self.width, self.height, self.title, None, None)
+        
         glfw.set_window_size_limits(window, self.width, self.height, glfw.DONT_CARE, glfw.DONT_CARE)
 
         if not window:
@@ -60,9 +57,19 @@ class window:
     
     def sync_io(self) -> tuple[int, int, int, int]:
         io = imgui.get_io()
+
+        # Calculate time elapsed since the last frame
+        current_time = glfw.get_time()
+        io.delta_time = current_time - self.last_time
+        self.last_time = current_time
+
+        # Fallback to prevent zero or negative delta_time
+        if io.delta_time <= 0.0:
+            io.delta_time = 1.0 / 60.0
+
         width, height = glfw.get_window_size(self.window)
         fb_width, fb_height = glfw.get_framebuffer_size(self.window)
-        
+
         io.display_size = (width, height)
 
         if width > 0 and height > 0:

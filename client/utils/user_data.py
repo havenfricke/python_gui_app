@@ -37,6 +37,7 @@ def get_public_ip_standard():
     with urllib.request.urlopen('https://ident.me') as response:
         return response.read().decode('utf8')
     
+# ----- Helper functions -----
 
 def get_app_id():
     path = os.getcwd() + "/user_data"
