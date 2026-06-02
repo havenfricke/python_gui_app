@@ -1,6 +1,7 @@
 from slimgui import imgui
 import app_state
 from utils.notifications import extra_window
+from controllers.dashboard_controller import dashboard_ctrl
 import re
 
 def init_dashboard():
@@ -42,10 +43,10 @@ def init_dashboard():
         imgui.table_next_column()
         imgui.table_set_column_index(1)
 
-        changed, app_state.watcher.username_input = imgui.input_text("##username-input", app_state.watcher.username_input)
+        changed, new_username = imgui.input_text("##username-input", app_state.watcher.username_input)
 
         if changed:
-            print(app_state.watcher.username_input)
+            dashboard_ctrl.update_username_input(new_username)
 
         imgui.same_line()
 
@@ -65,13 +66,8 @@ def init_dashboard():
             )
 
             if proceed:
-                expected_characters = r'^[a-zA-Z0-9]+$' # expect only normal english letters and numbers
-                if re.fullmatch(expected_characters, app_state.watcher.username_input) and app_state.watcher.username_input != app_state.watcher.username:
-                    app_state.watcher.username = app_state.watcher.username_input
-                    app_state.watcher.username_input = ""
-                else:
-                    app_state.watcher.extra_window_message = f"{app_state.watcher.username_input} contains invalid characters or is already your username."
-                    app_state.watcher.show_extra_window = True
+
+                dashboard_ctrl.update_username()
 
                 if app_state.watcher.show_extra_window:
                     app_state.watcher.show_extra_window, proceed_2 = extra_window(
@@ -79,7 +75,7 @@ def init_dashboard():
                         title="Invalid",
                         content=app_state.watcher.extra_window_message
                     )
-                        
+
 
         imgui.end_table()
 
