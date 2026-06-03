@@ -2,7 +2,6 @@ from slimgui import imgui
 import app_state
 from utils.notifications import extra_window
 from controllers.dashboard_controller import dashboard_ctrl
-import re
 
 def init_dashboard():
 
@@ -70,7 +69,7 @@ def init_dashboard():
                 dashboard_ctrl.update_username()
 
                 if app_state.watcher.show_extra_window:
-                    app_state.watcher.show_extra_window, proceed_2 = extra_window(
+                    app_state.watcher.show_extra_window, proceed = extra_window(
                         is_open=app_state.watcher.show_extra_window,
                         title="Invalid",
                         content=app_state.watcher.extra_window_message
