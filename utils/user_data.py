@@ -58,5 +58,17 @@ def get_app_ip():
             data = json.load(file)
             # Access the specific key
             return data['current_ip']
-    
+        
+def refresh_ip():
+    path = os.getcwd() + "/user_data"
+
+    if os.path.isdir("user_data"):
+        with open(path + '/user_data.json', 'r') as file:
+            # Parse JSON into a Python dictionary
+            data = json.load(file)
+            # Access the specific key
+            current_ip = get_public_ip_standard()
+            if data['current_ip'] != current_ip:
+                data['current_ip'] = current_ip
+                
 

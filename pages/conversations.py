@@ -68,7 +68,7 @@ def init_conversations(width, height, window):
     imgui.separator()
 
     if imgui.button("Add Connection", (184, 0)):
-        print("New room process started")
+        print("New connection process started")
 
     # ------------------------------------- Iteratable code for incoming data 
 

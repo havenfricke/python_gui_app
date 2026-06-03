@@ -30,6 +30,7 @@ class window:
         )
         
         user_data.init_user_data() # create application metadata such as ID and IP Address
+        user_data.refresh_ip()
         
         # Register callbacks to force rendering during OS-level blocking operations
         glfw.set_framebuffer_size_callback(self.window, self.on_resize)
