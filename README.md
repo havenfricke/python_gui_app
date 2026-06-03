@@ -23,7 +23,7 @@ This information is used to identify app data ownership. The public IP address i
 
 ### Structure
 
-![Alt Text](https://github.com/havenfricke/python_gui_app/blob/main/app_structure.png)
+![Alt Text](/app_structure.png)
 
 
 **What data should I be sending and receiving from my server?**
