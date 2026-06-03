@@ -1,6 +1,7 @@
 from slimgui import imgui
 import app_state
 from models.Message import Message
+from controllers.conversation_controller import conversation_ctrl
 
 def init_conversations(width, height, window):
 
@@ -96,12 +97,10 @@ def init_conversations(width, height, window):
 
     if imgui.button("SEND", (70, 110)):
         print("send message triggered")
-        new_message = Message(text=app_state.watcher.message_input, sent=1)
+        new_message = Message(text=app_state.watcher.message_input)
         input = ""
-        app_state.watcher.message_input = ""
-        updated_messages = app_state.watcher.cc_messages.copy()
-        updated_messages[new_message.msg_id] = new_message
-        app_state.watcher.cc_messages = updated_messages
+        conversation_ctrl.send_message(new_message=new_message)
+
         
 
     imgui.end_child() # Input Text
