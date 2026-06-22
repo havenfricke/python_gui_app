@@ -77,8 +77,11 @@ CREATE TABLE apps (
     app_ip VARCHAR(255) NOT NULL,
     app_metadata JSON
 )
-Python Class Mapping Example (Backend/Server Code):
+
 ```
+
+Python Class Mapping Example (Backend/Server Code):
+
 ```Python
 class App:
     def __init__(self, app_id: str, app_ip: str, app_metadata: dict):
