@@ -2,45 +2,90 @@
 
 **Python v3.10+ required for using `match` statements.**
 
-- Create venv: `python -m venv venv_name`
-- `cd venv_name` then (Windows) `./Scripts/Activate.ps1` or (Linux) `source bin/activate`
-- Switch interpreter to venv if necessary.
-- Install packages: `pip install slimgui glfw PyOpenGL numpy requests`
-- [ImGui reference](https://nurpax.github.io/slimgui/api/imgui.html) (Have this open when building with this app)
-
-
-### Overview
-
-The main.py file is a simple entry point for the application. It is not meant to be extended, added to, or modified.
-Inside `/core/window.py` is the main application layout and structure, window initialization, and other general settings.
-The `/components/...` path contains layout elements such as `nav.py` and `content_panel.py`. They are responsible for handling
-the navigation menu and dynamic "content panel" updates during app use. Inside `/pages/...` are the "pages" that are rendered
-when navigating the application. The `app_state.py` file is responsible for housing variables, arrays, etc. for the state of the
-application to remain uniform and allow any file to access values necessary for the application's functionality.
-
-When the application first runs it will create a folder and file named `user_data/user_data.json` storing a uniquely generated ID and public IP address.
-This information is used to identify app data ownership. The public IP address is fetched on app startup and cross-referenced with the last stored IP then, saved if different.
-
 ### Structure
 
 ![Alt Text](/app_structure.png)
 
+### Project Overview
+python_gui_app is a Python-based scaffold framework designed for creating cross-platform, cloud-connected desktop applications with built-in state tracking. It utilizes slimgui (an ImGui binding) for the user interface.
 
-**What data should I be sending and receiving from my server?**
-```sql
+**Prerequisites & Installation**
+The framework relies heavily on Python 3.10+ *to support modern language features like match statements*.
+
+Dependencies: slimgui, glfw, PyOpenGL, numpy, requests
+
+**Setup Instructions:**
+
+- Create a virtual environment: python -m venv venv_name
+
+- Activate the virtual environment:
+
+- Windows: `./venv_name/Scripts/Activate.ps1`
+
+- Linux/macOS: `source venv_name/bin/activate`
+
+- Install required packages: `pip install slimgui glfw PyOpenGL numpy requests`
+
+**Architectural Documentation**
+The framework implements a strict component-based architecture. To maintain stability, modifications should be isolated to specific directories.
+
+1. Core Entry Point (main.py)
+Purpose: Serves strictly as the runtime entry point.
+
+Usage constraint: This file should not be extended, modified, or populated with application logic. It solely triggers the initialization sequence.
+
+2. Window & Application Structure (core/window.py)
+Purpose: Handles the primary GLFW window initialization, application loop, general rendering settings, and structural layout definitions.
+
+Usage: Window objects, GLFW context configurations, and ImGui rendering loops are managed here. All subsequent UI components rely on context defined in this file.
+
+3. State Management (app_state.py)
+Purpose: A centralized data store used to house variables, arrays, and application states.
+
+Usage: Any file needing to write or read application-level variables must import and interface with app_state.py. This ensures a uniform state and prevents prop-drilling or circular dependency issues between nested GUI elements.
+
+4. UI Components (/components/)
+Purpose: Houses modular GUI layout constructs.
+
+nav.py: Responsible for managing the sidebar/topbar navigation menu events and rendering.
+
+content_panel.py: Responsible for dynamically mounting and unmounting page views within the central application frame.
+
+Usage constraint: When modifying or creating new components, you must pass the active window objects, GLFW context, and ImGui settings as function/method arguments.
+
+5. Application Views (/pages/)
+Purpose: Houses the distinct user-facing screens of the application.
+
+Usage: Files placed here represent specific views that are rendered inside the content_panel when triggered by nav.py.
+
+Data Initialization and Cloud Tracking Protocol
+Local Identity File:
+Upon first execution, the application automatically provisions a local JSON file at user_data/user_data.json.
+
+It generates and stores a unique Application ID string.
+
+It fetches the public IP of the host machine. On subsequent boots, the public IP is cross-referenced with the stored IP and rewritten if a change is detected.
+
+Server/Database Synchronization Setup:
+The scaffold is designed to push this local identity to a backend server. The developer is instructed to mirror the local data model using the following backend architecture:
+
+SQL Schema for App Tracking:
+
+```SQL
 CREATE TABLE apps (
     app_id VARCHAR(255) NOT NULL PRIMARY KEY UNIQUE COMMENT 'Primary Key',
     app_ip VARCHAR(255) NOT NULL,
     app_metadata JSON
 )
+Python Class Mapping Example (Backend/Server Code):
 ```
-```python
+```Python
 class App:
     def __init__(self, app_id: str, app_ip: str, app_metadata: dict):
         self.app_id = app_id
         self.app_ip = app_ip
         self.app_metadata = app_metadata
 ```
-
-*All necessary window objects, glfw, and imgui settings need to be passed as arguments to pages and components.*
+**Component Implementation Rule**
+A critical enforcement rule defined by the architecture is that context is not globally inherited by the GUI elements. All necessary window objects, GLFW instances, and ImGui settings must be explicitly passed as arguments to any new pages and components you create.
 
